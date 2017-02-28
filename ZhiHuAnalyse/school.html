@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+</head>
+<body>
+    <div id="main" style="width: 1600px;height:800px;"></div>
+</body>
+</html>
+<script src="Scripts/echarts.min.js"></script>
+<script type="text/javascript">
+    window.onload = function () {
+        var myChart = echarts.init(document.getElementById('main'));
+        option = {
+            color: ['#3398DB'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {             // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'         // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: ['腾讯', '百度', '阿里巴巴集团', '网易', '华为', '谷歌 (Google)', '微软（Microsoft）', 'IBM', '美团网', '奇虎 360'],
+                    axisTick: {
+                        alignWithLabel: true
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '直接访问',
+                    type: 'bar',
+                    barWidth: '60%',
+                    data: [1297, 1182, 827, 429, 421, 290, 261, 249, 213, 201]
+                }
+            ]
+        };
+        myChart.setOption(option);
+    }
+</script>

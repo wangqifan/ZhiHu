@@ -1,0 +1,86 @@
+﻿
+@{
+    ViewBag.Title = "AnalyseForSex";
+}
+
+<input type="text" value="@ViewData["man"]" id="man" style="display:none" />
+<input type="text" value="@ViewData["woman"]" id="woman" style="display:none" />
+<input type="text" value="@ViewData["unknow"]" id="other" style="display:none" />
+<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+<div id="main" style="width: 1200px;height:800px;"></div>
+<script src="~/Scripts/echarts.min.js"></script>
+<script type="text/javascript">
+    window.onload = function () {
+        var manvalue = $("#man").val();
+        var womanvalue = $("#woman").val();
+        var OTERVALUE = $("#other").val();
+        var myChart = echarts.init(document.getElementById('main'));
+        option = {
+            backgroundColor: '#2c343c',
+
+            title: {
+                text: '知乎用户男女比例',
+                left: 'center',
+                top: 20,
+                textStyle: {
+                    color: '#ccc'
+                }
+            },
+
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+
+            visualMap: {
+                show: false,
+                min: 100000,
+                max: 1000000,
+                inRange: {
+                    colorLightness: [0, 1]
+                }
+            },
+            series: [
+                {
+                    name: '访问来源',
+                    type: 'pie',
+                    radius: '55%',
+                    center: ['50%', '50%'],
+                    data: [
+                        { value: manvalue, name: '男' },
+                        { value: womanvalue, name: '女' },
+                        { value: OTERVALUE, name: '未知' },
+
+
+                    ].sort(function (a, b) { return a.value - b.value }),
+                    roseType: 'angle',
+                    label: {
+                        normal: {
+                            textStyle: {
+                                color: 'rgba(25500, 25500, 25500, 0.3)'
+                            }
+                        }
+                    },
+                    labelLine: {
+                        normal: {
+                            lineStyle: {
+                                color: 'rgba(25500, 25500, 25500, 0.3)'
+                            },
+                            smooth: 0.2,
+                            length: 10,
+                            length2: 20
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            color: '#c23531',
+                            shadowBlur: 200,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+        myChart.setOption(option);
+    }
+</script>

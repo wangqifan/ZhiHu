@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+</head>
+<body>
+    <div id="main" style="width: 1600px;height:800px;"></div>
+</body>
+</html>
+<script src="Scripts/echarts.min.js"></script>
+<script type="text/javascript">
+    window.onload = function () {
+        var myChart = echarts.init(document.getElementById('main'));
+        option = {
+            backgroundColor: '#2c343c',
+            title: {
+                text: '被关注量分布',
+                subtext: '',
+                left: 'left',
+                top: 'bottom',
+                textStyle: {
+                     color: '#ccc'
+                      }
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c}%"
+            },
+            toolbox: {
+                orient: 'vertical',
+                top: 'center',
+                feature: {
+                    dataView: { readOnly: false },
+                    restore: {},
+                    saveAsImage: {}
+                }
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+                data: ['关注量0-2', '关注量3-10', '关注量11到100', '关注量100到1万', '关注量1万以上']
+                ,
+                textStyle: {
+                    color: '#ccc'
+                }
+            },
+            calculable: true,
+            series: [
+                {
+                    name: '漏斗图',
+                    type: 'funnel',
+                    width: '40%',
+                    height: '45%',
+                    left: '5%',
+                    top: '50%',
+                    data: [
+                        { value: 48.3, name: '关注量0-2' },
+                        { value: 25.6, name: '关注量3-10' },
+                        { value: 22.0, name: '关注量11到100' },
+                        { value: 8.2, name: '关注量100到1万' },
+                        { value: 0.2, name: '关注量1万以上' }
+                    ]
+                },
+                {
+                    name: '金字塔',
+                    type: 'funnel',
+                    width: '40%',
+                    height: '45%',
+                    left: '5%',
+                    top: '5%',
+                    sort: 'ascending',
+                    data: [
+                     { value: 48.3, name: '关注量0-2' },
+                        { value: 25.6, name: '关注量3-10' },
+                        { value: 22.0, name: '关注量11到100' },
+                        { value: 8.2, name: '关注量100到1万' },
+                        { value: 0.2, name: '关注量1万以上' }
+                    ]
+                }
+             
+            ]
+        };
+  
+        myChart.setOption(option);
+    }
+</script>
