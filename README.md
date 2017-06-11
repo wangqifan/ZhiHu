@@ -21,3 +21,4 @@
 
 如果需要运行程序  请装好Redis，sqlserver  并配置好
 
+![image](http://images2015.cnblogs.com/blog/814953/201701/814953-20170108101133675-95314149.png)
