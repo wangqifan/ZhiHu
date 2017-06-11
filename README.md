@@ -4,6 +4,11 @@
 爬取太频繁会被知乎返回429（too many request）,应对的策略是挂代理，一种方法是使用专业的云代理服务（有点贵）,
 另外一种自建代理池（https://github.com/wangqifan/ProxyPool ），定时爬取互联网上免费代理ip。最后数据使用sql server存储，
 最后对数据进行分析，使用百度的echart.js进行画图
+数据展示：
+![image](https://github.com/wangqifan/ZhiHu/blob/master/814953-20170108120707706-1003815196.png)
+![image](https://github.com/wangqifan/ZhiHu/blob/master/814953-20170108120724034-1950593592.png)
+![image](https://github.com/wangqifan/ZhiHu/blob/master/814953-20170108120919675-1582035152.png)
+![image](https://github.com/wangqifan/ZhiHu/blob/master/814953-20170108121032566-1417590158.png)
 
 抓取百万知乎用户数据之爬取思路 http://www.cnblogs.com/zuin/p/6227834.html 
 
