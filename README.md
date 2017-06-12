@@ -5,6 +5,9 @@
 另外一种自建代理池（https://github.com/wangqifan/ProxyPool ），定时爬取互联网上免费代理ip。最后数据使用sql server存储，
 最后对数据进行分析，使用百度的echart.js进行画图
 数据展示：
+
+
+
 <image src="https://github.com/wangqifan/ZhiHu/blob/master/814953-20170108120707706-1003815196.png" width=500>
 <image src="https://github.com/wangqifan/ZhiHu/blob/master/814953-20170108120724034-1950593592.png" width=500>
 ![image](https://github.com/wangqifan/ZhiHu/blob/master/814953-20170108120919675-1582035152.png)
