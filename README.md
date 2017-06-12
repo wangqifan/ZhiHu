@@ -7,12 +7,12 @@
 数据展示：
 
 
-
 <image src="https://github.com/wangqifan/ZhiHu/blob/master/814953-20170108120707706-1003815196.png" width=500>
 <image src="https://github.com/wangqifan/ZhiHu/blob/master/814953-20170108120724034-1950593592.png" width=500>
-![image](https://github.com/wangqifan/ZhiHu/blob/master/814953-20170108120919675-1582035152.png)
-![image](https://github.com/wangqifan/ZhiHu/blob/master/814953-20170108121032566-1417590158.png)
+<image src="https://github.com/wangqifan/ZhiHu/blob/master/814953-20170108120919675-1582035152.png" width=500>
+<image src="https://github.com/wangqifan/ZhiHu/blob/master/814953-20170108121032566-1417590158.png" width=500>
 
+#博客
 抓取百万知乎用户数据之爬取思路 http://www.cnblogs.com/zuin/p/6227834.html 
 
 抓取百万知乎用户设计之实体设计 http://www.cnblogs.com/zuin/p/6227934.html 
@@ -28,5 +28,3 @@
 抓取知乎百万用户信息之总结篇 http://www.cnblogs.com/zuin/p/6261772.html  
 
 如果需要运行程序  请装好Redis，sqlserver  并配置好
-
-![image](http://images2015.cnblogs.com/blog/814953/201701/814953-20170108101133675-95314149.png)
