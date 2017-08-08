@@ -19,13 +19,13 @@
  * HTML解析
    * HtmlAgilityPack
  * 所用Redis的数据结构
-   *　队列(多台电脑之间协作)
-   * hash(避免重复爬取)
+   * 队列(多台电脑之间协作)
+   * hash(避免重复爬取) 
  * 数据展示
    * echart.js
+   
 数据展示：
----
-
+---------
 
 <image src="https://github.com/wangqifan/ZhiHu/blob/master/814953-20170108120707706-1003815196.png" width=500>
 <image src="https://github.com/wangqifan/ZhiHu/blob/master/814953-20170108120724034-1950593592.png" width=500>
