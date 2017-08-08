@@ -14,6 +14,6 @@
 <image src="https://github.com/wangqifan/ZhiHu/blob/master/814953-20170108120724034-1950593592.png" width=500>
 <image src="https://github.com/wangqifan/ZhiHu/blob/master/814953-20170108120919675-1582035152.png" width=500>
 <image src="https://github.com/wangqifan/ZhiHu/blob/master/814953-20170108121032566-1417590158.png" width=500>
-
-
+[博客]("http://www.cnblogs.com/zuin/")
+备注
 如果需要运行程序  请装好Redis，sqlserver  并配置好
