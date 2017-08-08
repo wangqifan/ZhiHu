@@ -11,11 +11,11 @@
 所用技术
 --
  * 数据库
- 　* Redis
-   * ms sqlserver
+ 　 * Redis
+    * ms sqlserver
  * 数据库访问
-  * Entity Framework
-  * ServiceStack.Redis
+   * Entity Framework
+   * ServiceStack.Redis
  * HTML解析
 数据展示：
 ---
