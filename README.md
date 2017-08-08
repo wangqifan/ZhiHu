@@ -7,7 +7,16 @@
 爬取太频繁会被知乎返回429（too many request）,应对的策略是挂代理，一种方法是使用专业的云代理服务（有点贵）,
 另外一种自建代理池（https://github.com/wangqifan/ProxyPool ），定时爬取互联网上免费代理ip。最后数据使用sql server存储，
 最后对数据进行分析，使用百度的echart.js进行画图
+所用技术
+--
+  *数据库
+    *Redis
+    * ms sqlserver
+  *数据库访问
+   *Entity Framework
+   *ServiceStack.Redis
 数据展示：
+---
 
 
 <image src="https://github.com/wangqifan/ZhiHu/blob/master/814953-20170108120707706-1003815196.png" width=500>
