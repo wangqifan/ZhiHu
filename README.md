@@ -11,7 +11,7 @@
 所用技术
 --
  * 数据库
- 　 * Redis
+ 　  * Redis
     * ms sqlserver
  * 数据库访问
    * Entity Framework
