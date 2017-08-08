@@ -11,12 +11,18 @@
 所用技术
 --
  * 数据库
- 　  * Redis
     * ms sqlserver
+    * Redis
  * 数据库访问
    * Entity Framework
    * ServiceStack.Redis
  * HTML解析
+   * HtmlAgilityPack
+ * 所用Redis的数据结构
+   *　队列(多台电脑之间协作)
+   * hash(避免重复爬取)
+ * 数据展示
+   * echart.js
 数据展示：
 ---
 
