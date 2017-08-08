@@ -10,12 +10,12 @@
 
 所用技术
 --
-  *数据库
-    *Redis
+  * 数据库
+    * Redis
     * ms sqlserver
-  *数据库访问
-   *Entity Framework
-   *ServiceStack.Redis
+  * 数据库访问
+   * Entity Framework
+   * ServiceStack.Redis
 数据展示：
 ---
 
