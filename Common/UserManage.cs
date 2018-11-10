@@ -33,9 +33,9 @@ namespace Common
         /// 将用户关注的人的URL存放到nexturl中
         /// </summary>
         /// <param name="offset"></param>
-        private void GetUserfollowing(int currentPageIndex)
+        private void GetUserfollowing()
         {
-            string following = CommonConstant.ZHMembersRoot + url_token + "/followees?include=data%5B%2A%5D.answer_count%2Carticles_count%2Cfollower_count%2Cis_followed%2Cis_following%2Cbadge%5B%3F%28type%3Dbest_answerer%29%5D.topics&limit=20&offset=" + currentPageIndex;
+            string following = CommonConstant.ZHMembersRoot + url_token + "/followees?include=data%5B%2A%5D.answer_count%2Carticles_count%2Cfollower_count%2Cis_followed%2Cis_following%2Cbadge%5B%3F%28type%3Dbest_answerer%29%5D.topics&limit=20&offset=0";
             RedisManage.AddNextUrl(following);
         }
 
@@ -43,9 +43,9 @@ namespace Common
         /// 将关注用户的人的URL存放到nexturl中
         /// </summary>
         /// <param name="currentPageIndex"></param>
-        private void GetUserFollowers(int currentPageIndex)
+        private void GetUserFollowers()
         {
-            string foollowed = CommonConstant.ZHMembersRoot + url_token + "/followers?include=data%5B*%5D.answer_count%2Carticles_count%2Cfollower_count%2Cis_followed%2Cis_following%2Cbadge%5B%3F(type%3Dbest_answerer)%5D.topics&offset=" + currentPageIndex + "&limit=20";
+            string foollowed = CommonConstant.ZHMembersRoot + url_token + "/followers?include=data%5B*%5D.answer_count%2Carticles_count%2Cfollower_count%2Cis_followed%2Cis_following%2Cbadge%5B%3F(type%3Dbest_answerer)%5D.topics&offset=0&limit=20";
             RedisManage.AddNextUrl(foollowed);
         }
 
@@ -65,7 +65,7 @@ namespace Common
         /// 分析用户关注者列表
         /// </summary>
         /// <param name="followingContent"></param>
-        public void AnalyseHTML(string htmlContent, Action<int> getUserUrls, bool isGetUserInfo = false)
+        public void AnalyseHTML(string htmlContent, Action getUserUrls, bool isGetUserInfo = false)
         {
             if (string.IsNullOrEmpty(htmlContent))
                 return;
@@ -84,22 +84,7 @@ namespace Common
                 if (isGetUserInfo)
                     GetUserInformation(stringbuilder.ToString());
 
-                //body 获取页面信息
-                HtmlNode followingNode = doc.GetElementbyId("Profile-following");
-
-                HtmlNodeCollection pageMsgNodes = followingNode.LastChild.LastChild.ChildNodes;
-                HtmlNode pagesNode = pageMsgNodes[pageMsgNodes.Count - 2];//倒数第二个节点为总页数
-
-                int pages = 0;//页面总数
-                if ("Button PaginationButton Button--plain".Equals(pagesNode.GetAttributeValue("class", "none")))
-                {//if element attribute exist
-                    int.TryParse(pagesNode.InnerText, out pages);
-                }
-
-                for (int currentIndex = 0; currentIndex < pages * CommonConstant.CountPerPage; currentIndex += CommonConstant.CountPerPage)
-                {
-                    getUserUrls(currentIndex);
-                }
+                getUserUrls();
 
                 watch.Stop();
                 Console.WriteLine("分析用户{0}用了{1}毫秒", url_token, watch.ElapsedMilliseconds.ToString());
@@ -115,8 +100,8 @@ namespace Common
         /// </summary>
         public void analyse()
         {
-            AnalyseHTML(GetHtml(ZHUrlPoolType.Following), index => { GetUserfollowing(index); }, true);
-            AnalyseHTML(GetHtml(ZHUrlPoolType.Followers), index => { GetUserFollowers(index); });
+            AnalyseHTML(GetHtml(ZHUrlPoolType.Following), () => { GetUserfollowing(); }, true);
+            AnalyseHTML(GetHtml(ZHUrlPoolType.Followers), () => { GetUserFollowers(); });
         }
     }
 }
