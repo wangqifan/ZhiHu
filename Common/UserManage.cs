@@ -1,93 +1,122 @@
 ﻿using HtmlAgilityPack;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Model;
 using System.Diagnostics;
+using System.Text;
 
 namespace Common
 {
-    public   class UserManage
+    public class UserManage
     {
-        /// <summary>
-        /// 用户主页的html代码
-        /// </summary>
-        private string html;
         /// <summary>
         /// 用户的urltokken  每个用户都不一样
         /// </summary>
         private string url_token;
-      
+
         public UserManage(string urltoken)
-         {
-             url_token = urltoken;
-      
-         }  
-         //获取json中的用户信息  
-        private void  GetUserInformation(string json)
-        {  
-            JObject obj = JObject.Parse(json);
-            //string xpath = "['" + url_token + "']";
-            JToken tocken = obj.SelectToken("initialState.entities.users.['"+ url_token + "']");
-            //tocken = tocken.SelectToken(xpath);
-          
-            RedisManage.PushUserInfo(tocken.ToString());
-              
-        } 
-          //获取用户关注列表的url
-        private void  GetUserFlowerandNext()
         {
-                 string foollowed = "https://www.zhihu.com/api/v4/members/" + url_token + "/followers?include=data%5B*%5D.answer_count%2Carticles_count%2Cfollower_count%2Cis_followed%2Cis_following%2Cbadge%5B%3F(type%3Dbest_answerer)%5D.topics&offset=0&limit=20";
-                 string following = "https://www.zhihu.com/api/v4/members/" + url_token + "/followees?include=data%5B%2A%5D.answer_count%2Carticles_count%2Cfollower_count%2Cis_followed%2Cis_following%2Cbadge%5B%3F%28type%3Dbest_answerer%29%5D.topics&limit=20&offset=0";
-           
-                 RedisManage.AddNextUrl(following);
-                 RedisManage.AddNextUrl(foollowed);
+            url_token = urltoken;
         }
+
         /// <summary>
-        /// 获取主页html代码
+        /// 获取json中的用户信息
+        /// </summary>
+        /// <param name="json"></param>
+        private void GetUserInformation(string json)
+        {
+            JObject obj = JObject.Parse(json);
+            JToken tocken = obj.SelectToken("initialState.entities.users.['" + url_token + "']");
+            RedisManage.PushUserInfo(tocken.ToString());
+        }
+
+        /// <summary>
+        /// 将用户关注的人的URL存放到nexturl中
+        /// </summary>
+        /// <param name="offset"></param>
+        private void GetUserfollowing(int currentPageIndex)
+        {
+            string following = CommonConstant.ZHMembersRoot + url_token + "/followees?include=data%5B%2A%5D.answer_count%2Carticles_count%2Cfollower_count%2Cis_followed%2Cis_following%2Cbadge%5B%3F%28type%3Dbest_answerer%29%5D.topics&limit=20&offset=" + currentPageIndex;
+            RedisManage.AddNextUrl(following);
+        }
+
+        /// <summary>
+        /// 将关注用户的人的URL存放到nexturl中
+        /// </summary>
+        /// <param name="currentPageIndex"></param>
+        private void GetUserFollowers(int currentPageIndex)
+        {
+            string foollowed = CommonConstant.ZHMembersRoot + url_token + "/followers?include=data%5B*%5D.answer_count%2Carticles_count%2Cfollower_count%2Cis_followed%2Cis_following%2Cbadge%5B%3F(type%3Dbest_answerer)%5D.topics&offset=" + currentPageIndex + "&limit=20";
+            RedisManage.AddNextUrl(foollowed);
+        }
+
+        /// <summary>
+        /// 根据想要获取的数据类型来获得HTML内容
         /// </summary>
         /// <returns></returns>
-        private bool GetHtml()
-        {                 
-            string url="https://www.zhihu.com/people/"+url_token+"/following";
+        private string GetHtml(ZHUrlPoolType type)
+        {
+            string html;
+            string url = CommonConstant.ZHRoot + url_token + "/" + Enum.GetName(typeof(ZHUrlPoolType), type).ToLower();
             html = HttpHelp.DownLoadString(url);
-            return  !string.IsNullOrEmpty(html);
+            return html;
         }
+
+        /// <summary>
+        /// 分析用户关注者列表
+        /// </summary>
+        /// <param name="followingContent"></param>
+        public void AnalyseHTML(string htmlContent, Action<int> getUserUrls, bool isGetUserInfo = false)
+        {
+            if (string.IsNullOrEmpty(htmlContent))
+                return;
+
+            try
+            {
+                Stopwatch watch = new Stopwatch();
+                watch.Start();
+                HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+                doc.LoadHtml(htmlContent);
+
+                HtmlNode node = doc.GetElementbyId("js-initialData");
+                StringBuilder stringbuilder = new StringBuilder(node.InnerText);
+
+                //ext: 获取用户个人信息
+                if (isGetUserInfo)
+                    GetUserInformation(stringbuilder.ToString());
+
+                //body 获取页面信息
+                HtmlNode followingNode = doc.GetElementbyId("Profile-following");
+
+                HtmlNodeCollection pageMsgNodes = followingNode.LastChild.LastChild.ChildNodes;
+                HtmlNode pagesNode = pageMsgNodes[pageMsgNodes.Count - 2];//倒数第二个节点为总页数
+
+                int pages = 0;//页面总数
+                if ("Button PaginationButton Button--plain".Equals(pagesNode.GetAttributeValue("class", "none")))
+                {//if element attribute exist
+                    int.TryParse(pagesNode.InnerText, out pages);
+                }
+
+                for (int currentIndex = 0; currentIndex < pages * CommonConstant.CountPerPage; currentIndex += CommonConstant.CountPerPage)
+                {
+                    getUserUrls(currentIndex);
+                }
+
+                watch.Stop();
+                Console.WriteLine("分析用户{0}用了{1}毫秒", url_token, watch.ElapsedMilliseconds.ToString());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
+
         /// <summary>
         /// 分析json
         /// </summary>
-        public  void  analyse()
+        public void analyse()
         {
-                if (GetHtml())
-                {
-                    try
-                    {
-                        Stopwatch watch = new Stopwatch();
-                        watch.Start();
-                        HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-                        doc.LoadHtml(html);
-                        HtmlNode node = doc.GetElementbyId("js-initialData");
-                        StringBuilder stringbuilder =new StringBuilder(node.InnerText);
-                       // stringbuilder.Replace("&quot;", "'");           
-                       // stringbuilder.Replace("&lt;", "<");
-                       // stringbuilder.Replace("&gt;", ">");
-
-                        GetUserInformation(stringbuilder.ToString());
-                        GetUserFlowerandNext();
-                        watch.Stop();
-                        Console.WriteLine("分析Html用了{0}毫秒", watch.ElapsedMilliseconds.ToString());
-                       
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.ToString());
-                    }
-                }
-            
-            }    
+            AnalyseHTML(GetHtml(ZHUrlPoolType.Following), index => { GetUserfollowing(index); }, true);
+            AnalyseHTML(GetHtml(ZHUrlPoolType.Followers), index => { GetUserFollowers(index); });
         }
-    
+    }
 }
